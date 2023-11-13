@@ -3,12 +3,16 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import roleRoute from'./routes/role.js';
 import authRoute from'./routes/auth.js'
+import cors from 'cors';
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
-//DB Connection
+
+app.use(cors(
+    {origin: "http://localhost:4200" }
+));
 
 app.use('/api/role', roleRoute)
 app.use("/api/auth", authRoute )
@@ -36,6 +40,7 @@ app.use((obj,req,res,next)=>{
     })
 });
 
+//DB connection
 const connectMongoDB = async()=>{
     try{
         await mongoose.connect(process.env.MONGO_URL);
@@ -45,7 +50,7 @@ const connectMongoDB = async()=>{
         throw error;
     }
 }
-app.listen(8800, ()=> {
+app.listen(8000, ()=> {
     connectMongoDB();
     console.log("Connected to backend!");
 });

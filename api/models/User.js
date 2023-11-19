@@ -1,5 +1,4 @@
 import mongoose, {Schema} from 'mongoose';
-import {monitorEventLoopDelay} from "perf_hooks";
 const UserSchema =new Schema(
     {
         username:{
@@ -21,12 +20,7 @@ const UserSchema =new Schema(
             default:false
         },
 
-        roles:{
-                type: [Schema.Types.ObjectId],
-                required:true,
-                ref:"Role" //reference to schema role
-        }
-
+        roles:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }]
 
 
 },

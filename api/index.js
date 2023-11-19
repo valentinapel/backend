@@ -30,7 +30,7 @@ app.use((err,req,res,next)=>{
 
 //succcess handler middleware
 app.use((obj,req,res,next)=>{
-    const statusCode=obj.status || 500;
+    const statusCode=obj.status || 200;
     const message = obj.message || "something went wrong";
     return res.status(statusCode).json({
         success: [200, 201, 204].some(a => a === obj.status),

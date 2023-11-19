@@ -7,20 +7,27 @@ import {CreateSuccess} from "../utils/success.js";
 //logic for the registration of a user
 export const register = async (req,res,next)=> {
     try {
-        const role = await Role.find({role: 'User'});
+        //const role = await Role.find({role: 'User'});
+        const roles = await Role.find({role: {$in: req.body.roles}});
+
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(req.body.password, salt);
         const newUser = new User({
             username: req.body.username,
             email: req.body.email,
             password: hashPassword,
-            roles: role
+            roles: []
         });
+        for (const role of roles) {
+            newUser.roles.push((await role)._id);
+        }
+
         await newUser.save();
 
         return next(CreateSuccess(200, "user registered successfully"));
+    }
         //res.status(200).send("user registered successfully");
-    }catch(error){
+    catch(error){
         return next(CreateError(400, "username or password already registered"));
     }
 }

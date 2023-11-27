@@ -12,14 +12,14 @@ export const getAllUsers = async (req, res) => {
 };
 
 
-export const getById = async (req, res) => {
+export const getUserData = async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate("roles", "role");
 
         if (!user) {
             return res.status(404).json(CreateError(404, "User not found"));
         }
-        return res.status(200).json(CreateSuccess(200, "User found", user));
+        return res.status(200).json( user);
     } catch (error) {
         return res.status(500).json(CreateError(500, "Internal server error"));
     }
@@ -39,7 +39,7 @@ export const getUserRole = async (req, res) => {
         // Converte gli ID dei ruoli in array di oggetti con solo l'ID e il nome del ruolo
         const roleDetails = user.roles.map(role => ({ id: role._id, name: role.role }));
 
-        return res.status(200).json(CreateSuccess(200, "User role found", { roles: roleDetails }));
+        return res.status(200).json( { roles: roleDetails });
     } catch (error) {
         return res.status(500).json(CreateError(500, "Internal server error"));
     }

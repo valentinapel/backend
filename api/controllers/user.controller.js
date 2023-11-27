@@ -38,8 +38,10 @@ export const getUserRole = async (req, res) => {
 
         // Converte gli ID dei ruoli in array di oggetti con solo l'ID e il nome del ruolo
         const roleDetails = user.roles.map(role => ({ id: role._id, name: role.role }));
+        const roles = roleDetails.length === 1 ? roleDetails[0] : roleDetails;//tolgo l'array
 
-        return res.status(200).json( { roles: roleDetails });
+
+        return res.status(200).json(  roles );//restituisce solo i due dati. id e name di ruolo
     } catch (error) {
         return res.status(500).json(CreateError(500, "Internal server error"));
     }

@@ -74,7 +74,7 @@ export const login=  async (req,res,next)=>{
         }
         //TOKEN
         const token =jwt.sign({
-            id:user._id, isAdmin:user.isAdmin, roles:roles},process.env.JWT_SECRET
+            id:user.id, isAdmin:user.isAdmin, roles:roles},process.env.JWT_SECRET
         )
         //return next(CreateSuccess(200, "login success"));
         //res.status(200).send("login success");

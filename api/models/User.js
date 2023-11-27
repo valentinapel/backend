@@ -20,7 +20,7 @@ const UserSchema =new Schema(
             default:false
         },
 
-        roles:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }]
+        roles:  [{ type: mongoose.Types.ObjectId, ref: 'Role' }]
 
 
 },

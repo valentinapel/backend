@@ -8,8 +8,8 @@ const router=express.Router();
 
 router.get('/', verifyAdmin, getAllUsers);
 
-router.get('/getUserData',  verifyUser, getUserData);
+router.get('/getUserData',   getUserData);
 
-router.get('/getUserRole', verifyUser, getUserRole);
+router.get('/getUserRole',  getUserRole);
 
 export default router;

@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors(
-    {origin: "http://localhost:4200" }
+    {origin: "http://localhost:4200" , credentials: true}
 ));
 
 app.use('/api/role', roleRoute)

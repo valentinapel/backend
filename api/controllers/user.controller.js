@@ -14,9 +14,13 @@ export const getAllUsers = async (req, res) => {
 
 export const getUserData = async (req, res) => {
     try {
+        console.log('ID Utente:', req.params.id);
         const user = await User.findById(req.params.id).populate("roles", "role");
 
+        console.log('Utente trovato:', user);
+
         if (!user) {
+            console.log('Utente non trovato');
             return res.status(404).json(CreateError(404, "User not found"));
         }
         return res.status(200).json( user);

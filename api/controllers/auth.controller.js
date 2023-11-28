@@ -69,15 +69,17 @@ export const login=  async (req,res,next)=>{
         const isPasswordCorrect = await  bcrypt.compareSync(req.body.password, user.get("password"));
         if (!isPasswordCorrect) {
                 return next(CreateError(400, "password is incorrect"));
-            //res.status(400).send("password is incorrect");
 
         }
         //TOKEN
         const token =jwt.sign({
-            id:user.id, isAdmin:user.isAdmin, roles:roles},process.env.JWT_SECRET
+            id:user._id, isAdmin:user.isAdmin, roles:roles},process.env.JWT_SECRET
         )
+
+        //res.cookie('access_token', token, { httpOnly: true, domain: 'localhost' });
+
+
         //return next(CreateSuccess(200, "login success"));
-        //res.status(200).send("login success");
 
         res.cookie("access_token",token, {httpOnly:true})
             .status(200)
@@ -89,6 +91,5 @@ export const login=  async (req,res,next)=>{
 
         }catch(error){
         return next(CreateError(500, "something went wong"));
-        // res.status(500).send("something went wrong");
     }
 }

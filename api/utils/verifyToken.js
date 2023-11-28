@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import {CreateError} from "./error.js";
 import User from "../models/User.js";
 
-export const verifyToken = (req, res, next) => {
+export const verifyTokenDeprecated = (req, res, next) => {
     const token = req.cookies.access_token;
     if (!token) {
         return next(CreateError(401, "You are not authenticated"));
@@ -44,8 +44,10 @@ export const verifyToken = (req, res, next) => {
 
 
 
-export const verifyTokenDEprecated=(req,res,next)=>{
+export const verifyToken=(req,res,next)=>{
     const token = req.cookies.access_token;
+    console.log('Received Token:', token);
+
     if(!token)
         return next(CreateError(401,"You are not authenticated"));
     jwt.verify(token, process.env.JWT_SECRET,(err,user)=>{
@@ -56,8 +58,9 @@ export const verifyTokenDEprecated=(req,res,next)=>{
     })
 }
 
-export const verifyUser = (req, res, next) => {
+export const verifyUserD = (req, res, next) => {
     verifyToken(req, res, () => {
+
         if (req.user && (req.user.id || req.user.isAdmin)) {
             req.params.id = req.user.id;
             next();
@@ -66,6 +69,18 @@ export const verifyUser = (req, res, next) => {
         }
     });
 };
+
+export const verifyUser =(req,res,next)=>{
+    verifyToken(req,res,()=>{
+        console.log('User in verifyUser:', req.user);
+
+        if(req.user._id === req.params._id|| req.user.isAdmin){
+            next();
+        }else{
+            return next(CreateError(403, "you arenot authorized"))
+        }
+    })
+}
 
 
 export const verifyAdmin =(req,res,next)=>{

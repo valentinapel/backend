@@ -8,7 +8,7 @@ const router=express.Router();
 
 router.get('/', verifyAdmin, getAllUsers);
 
-router.get('/getUserData',   getUserData);
+router.get('/getUserData/:id', verifyUser,  getUserData);
 
 router.get('/getUserRole',  getUserRole);
 

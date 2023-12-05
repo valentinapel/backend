@@ -73,7 +73,7 @@ export const login=  async (req,res,next)=>{
         }
         //TOKEN
         const token =jwt.sign({
-            id:user._id, isAdmin:user.isAdmin, roles:roles},process.env.JWT_SECRET
+            id:user._id, username:user.username, isAdmin:user.isAdmin, roles:roles},process.env.JWT_SECRET
         )
 
         //res.cookie('access_token', token, { httpOnly: true, domain: 'localhost' });
@@ -81,15 +81,15 @@ export const login=  async (req,res,next)=>{
 
         //return next(CreateSuccess(200, "login success"));
 
-        res.cookie("access_token",token, {httpOnly:true})
-            .status(200)
+        res.status(200)
             .json({
                 status:200,
                 message:"Login success",
-                data:user
+                data:user,
+                token:token,
             })
 
         }catch(error){
-        return next(CreateError(500, "something went wong"));
+        return next(CreateError(500, "something went wrong"));
     }
 }

@@ -48,10 +48,12 @@ export const verifyToken=(req,res,next)=>{
     const token = req.cookies.access_token;
     console.log('Received Token:', token);
 
-    if(!token)
+    if(!token){
         return next(CreateError(401,"You are not authenticated"));
+    }
     jwt.verify(token, process.env.JWT_SECRET,(err,user)=>{
         if(err){
+            console.log("oh no");
             console.error('Token verification error:', err);
 
             if (err.name === 'TokenExpiredError') {
@@ -69,7 +71,7 @@ export const verifyToken=(req,res,next)=>{
 
 /* funzione di test */
 export const verifyTokenAlt=(req,res,next)=>{
-    const token = req.cookies.access_token;
+    const token = req.body.token;
     console.log('Received Token:', token);
 
     if(!token)

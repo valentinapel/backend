@@ -12,6 +12,6 @@ router.get('/getUserData/:id', verifyUser,  getUserData);
 
 router.get('/getUserRole',  getUserRole);
 
-router.get('/getUserDataFromToken', verifyTokenAlt);
+router.post('/getUserDataFromToken', verifyTokenAlt);
 
 export default router;

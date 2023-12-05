@@ -1,5 +1,5 @@
 import express from'express';
-import {verifyAdmin,  verifyUser, verifyTokenAlt} from "../utils/verifyToken.js";
+import {verifyAdmin,  verifyUser, verifyToken} from "../utils/verifyToken.js";
 import {getAllUsers,  getUserData, getUserRole} from "../controllers/user.controller.js";
 
 const router=express.Router();
@@ -12,6 +12,6 @@ router.get('/getUserData/:id', verifyUser,  getUserData);
 
 router.get('/getUserRole',  getUserRole);
 
-router.post('/getUserDataFromToken', verifyTokenAlt);
+router.post('/getUserDataFromToken', verifyToken);
 
 export default router;

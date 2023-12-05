@@ -45,52 +45,27 @@ export const verifyTokenDeprecated = (req, res, next) => {
 
 
 export const verifyToken=(req,res,next)=>{
-    const token = req.cookies.access_token;
-    console.log('Received Token:', token);
+    const token = req.body.token;
+    // console.log('Received Token:', token);
 
     if(!token){
         return next(CreateError(401,"You are not authenticated"));
     }
-    jwt.verify(token, process.env.JWT_SECRET,(err,user)=>{
-        if(err){
-            console.log("oh no");
-            console.error('Token verification error:', err);
-
-            if (err.name === 'TokenExpiredError') {
-                return next(CreateError(401, 'Token has expired'));
-            } else if (err.name === 'JsonWebTokenError') {
-                return next(CreateError(403, 'Token is not valid'));
-            } else {
-                return next(CreateError(500, 'Internal Server Error'));
+    else{
+        jwt.verify(token, process.env.JWT_SECRET,(err,user)=>{
+            if(err){
+                console.error('Token verification error:', err);
+                if (err.name === 'TokenExpiredError') {
+                    return next(CreateError(401, 'Token has expired'));
+                } else if (err.name === 'JsonWebTokenError') {
+                    return next(CreateError(403, 'Token is not valid'));
+                } else {
+                    return next(CreateError(500, 'Internal Server Error'));
+                }
             }
-        }
-        req.user=user;
-        next();
-    })
-}
-
-/* funzione di test */
-export const verifyTokenAlt=(req,res,next)=>{
-    const token = req.body.token;
-    console.log('Received Token:', token);
-
-    if(!token)
-        return next(CreateError(401,"You are not authenticated"));
-    jwt.verify(token, process.env.JWT_SECRET,(err,user)=>{
-        if(err){
-            console.error('Token verification error:', err);
-
-            if (err.name === 'TokenExpiredError') {
-                return next(CreateError(401, 'Token has expired'));
-            } else if (err.name === 'JsonWebTokenError') {
-                return next(CreateError(403, 'Token is not valid'));
-            } else {
-                return next(CreateError(500, 'Internal Server Error'));
-            }
-        }
-        req.user = user;
-        next();
-    })
+            return res.status(200).json({user});
+        })
+    }
 }
 
 export const verifyUserD = (req, res, next) => {

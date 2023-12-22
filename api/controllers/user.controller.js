@@ -5,12 +5,14 @@ import {CreateError} from "../utils/error.js";
 export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find().populate("roles", "role");
+        if (users.length === 0) {
+            return res.status(404).json(CreateError(404, "No users found"));
+        }
         return res.status(200).json(CreateSuccess(200, "All users", users));
     } catch (error) {
         return res.status(500).json(CreateError(500, "Internal server error"));
     }
 };
-
 
 export const getUserData = async (req, res) => {
     try {
@@ -50,3 +52,25 @@ export const getUserRole = async (req, res) => {
         return res.status(500).json(CreateError(500, "Internal server error"));
     }
 };
+
+export const deleteUser = async (req,res,next)=>{
+    const user_id = req.body.id;
+    // console.log('Received Id:', id);
+
+    if(!id){
+        return next(CreateError(403, 'User ID cannot be blank'));
+    }
+    else{
+        try {
+            const deletedUser = await User.findByIdAndDelete(id);
+    
+            if (!deletedUser) {
+                return next(CreateError(404, 'User not found'));
+            }
+    
+            return next(CreateSuccess(200, 'User deleted successfully'));
+        } catch (error) {
+            return next(CreateError(500, 'Internal Server Error'));
+        }
+    }
+}

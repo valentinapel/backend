@@ -2,8 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import roleRoute from'./routes/role.js';
-import authRoute from'./routes/auth.js'
-import userRoute from'./routes/user.js'
+import authRoute from'./routes/auth.js';
+import userRoute from'./routes/user.js';
+import restaurantRoute from './routes/restaurant.js';
+import bar_orderRoute from './routes/bar_order.js';
+import kitchenOrderRoute from "./routes/kitchenOrder.js";
+
 
 import cors from 'cors';
 import cookieParser from "cookie-parser";
@@ -20,6 +24,12 @@ app.use(cors(
 app.use('/api/role', roleRoute)
 app.use("/api/auth", authRoute )
 app.use("/api/user", userRoute )
+//api to restaurant function
+app.use("/api/restaurant", restaurantRoute )
+//api to order creation
+app.use("/api/bar", bar_orderRoute)
+app.use("/api/kitchen", kitchenOrderRoute)
+
 
 //error handler middleware
 app.use((err,req,res,next)=>{

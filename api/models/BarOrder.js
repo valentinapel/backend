@@ -1,5 +1,11 @@
 import mongoose, {Schema} from 'mongoose';
 
+const DrinkItemSchema = new Schema({
+    drink: { type: mongoose.Types.ObjectId, ref: 'Drink', required: true },
+    name: { type: String, required: true },
+    quantity: { type: Number, required: true }
+});
+
 const BarOrderSchema =new Schema(
     {
 
@@ -16,7 +22,7 @@ const BarOrderSchema =new Schema(
             required: true,
         },
 
-        drinks: [{ type: mongoose.Types.ObjectId, ref: 'Drink' }],
+        drinks: [DrinkItemSchema],
 
         date: { type: Date, default: Date.now }
 

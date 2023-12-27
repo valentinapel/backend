@@ -1,5 +1,11 @@
 import mongoose, {Schema} from 'mongoose';
 
+const FoodItemSchema = new Schema({
+    food: { type: mongoose.Types.ObjectId, ref: 'Food', required: true },
+    name: { type: String, required: true },
+    quantity: { type: Number, required: true }
+});
+
 const KitchenOrderSchema =new Schema(
     {
 
@@ -16,7 +22,7 @@ const KitchenOrderSchema =new Schema(
             required: true,
         },
 
-        foods: [{ type: mongoose.Types.ObjectId, ref: 'Food' }],
+        foods: [FoodItemSchema],
 
         date: { type: Date, default: Date.now }
 

@@ -7,6 +7,10 @@ const DrinkSchema =new Schema(
             required: true,
             unique:true
         },
+        price:{
+            type: Number,
+            required:true
+        }
     },
     {
         //will store the created updated date for us

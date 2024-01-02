@@ -6,7 +6,7 @@ import Table from "../models/Table.js";
 
 export const createDrink = async (req,res,next)=>{
     try{
-        if(req.body.name && req.body.name!==''){
+        if(req.body.name && req.body.name!=='' && req.body.price){
             const newDrink= new Drink(req.body);
             await newDrink.save();
             return res.send("drink created!");
@@ -19,7 +19,7 @@ export const createDrink = async (req,res,next)=>{
 
 export const createFood = async (req,res,next)=>{
     try{
-        if(req.body.name && req.body.name!==''){
+        if(req.body.name && req.body.name!=='' && req.body.price){
             const newFood= new Food(req.body);
             await newFood.save();
             return res.send("food created!");

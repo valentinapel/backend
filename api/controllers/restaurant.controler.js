@@ -1,6 +1,8 @@
 import Drink from "../models/Drink.js";
 import Food from "../models/Food.js";
 import Table from "../models/Table.js";
+import KitchenOrder from '../models/KitchenOrder.js';
+import BarOrder from '../models/BarOrder.js';
 
 //le funzioni di creazione servono a me per popolare DB
 
@@ -91,5 +93,37 @@ export const updateTable = async (req,res,next)=>{
 
     }catch(error){
         return res.status(500).send("internal server error");
+    }
+}
+
+async function setTableStatus(id){
+    //prendi l'id del tavolo e controlla se ha ordini associati, se sì setta come occupied, se no setta come free
+    if(!id){
+        return next(CreateError(403, 'Order ID cannot be blank'));
+    }
+    else{
+        try {
+            
+            const table = await Table.findById(id);
+            if (!table) {
+                return next(CreateError(404, 'Table not found'));
+            }
+            
+            const kitchenOrders = await KitchenOrder.find({ 'table': id });
+            const barOrders = await BarOrder.find({ 'table': id });
+
+            if (!kitchenOrders && !barOrders) {
+                table.occupied = false;
+            }
+            else{
+                table.occupied = true;
+            }
+            
+            await order.save();
+
+            return next(CreateSuccess(200, 'Table status set'));
+        } catch (error) {
+            return next(CreateError(500, 'Internal Server Error'));
+        }
     }
 }

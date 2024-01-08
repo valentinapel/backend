@@ -65,7 +65,7 @@ export const getAllFoods = async (req,res,next)=>{
     }
 }
 
-export const getAllTable = async (req,res,next)=>{
+export const getAllTables = async (req,res,next)=>{
     try{
         const tables = await Table.find({});
         return res.status(200).send(tables);

@@ -5,7 +5,7 @@ import {
     createTable,
     getAllDrinks,
     getAllFoods,
-    getAllTable, updateTable
+    getAllTables, updateTable
 } from "../controllers/restaurant.controler.js";
 
 const router= express.Router();
@@ -18,7 +18,7 @@ router.post('/createTable', createTable);
 //routing for the get function
 router.get('/getAllDrinks', getAllDrinks);
 router.get('/getAllFoods', getAllFoods);
-router.get('/getAllTable', getAllTable);
+router.get('/getAllTables', getAllTables);
 
 //route for the updating of the table occupied=false->true
 router.put('/update/:id', updateTable);

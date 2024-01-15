@@ -6,17 +6,16 @@ import KitchenOrder from '../models/KitchenOrder.js';
 
 export const createBarOrder = async (req,res,next)=>{
     try{
-        if(req.body.cod && req.body.cod!==''){
+        if(req.body.table){
             const newOrder= new BarOrder(req.body);
             await newOrder.save();
 
-            setTableStatus(newOrder.table);
-
-            return res.send("Bar order created!");
+            next();
         }
-        else return res.status(400).send("bad request");
+        else return res.status(400).send("Bad request");
     }catch(error){
-        return res.status(500).send("internal server error");
+        console.log(error);
+        return res.status(500).send("Internal server error");
     }
 }
 
@@ -79,17 +78,17 @@ export const setToReady = async (req,res,next)=>{
     }
 }
 
-async function setTableStatus(id){
-    //prendi l'id del tavolo e controlla se ha ordini associati, se sì setta come occupied, se no setta come free
+export const setTableStatus = async (req,res)=>{
+    const id = req.body.table;
     if(!id){
-        return next(CreateError(403, 'Order ID cannot be blank'));
+        return res.status(403).send("Order ID cannot be blank");
     }
     else{
         try {
             
             const table = await Table.findById(id);
             if (!table) {
-                return next(CreateError(404, 'Table not found'));
+                return res.status(404).send("Table not found");
             }
             
             const kitchenOrders = await KitchenOrder.find({ 'table': id });
@@ -102,11 +101,12 @@ async function setTableStatus(id){
                 table.occupied = true;
             }
             
-            await order.save();
+            await table.save();
 
-            return next(CreateSuccess(200, 'Table status set'));
+            return res.status(200).json(CreateSuccess(200, "Table set correctly"));
         } catch (error) {
-            return next(CreateError(500, 'Internal Server Error'));
+            console.log(error);
+            return res.status(500).send("Internal server error");
         }
     }
 }

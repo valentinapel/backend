@@ -103,7 +103,7 @@ export const setTableStatus = async (req,res)=>{
             
             await table.save();
 
-            return res.status(200).send("Table status set");
+            return res.status(200).json(CreateSuccess(200, "Table set correctly"));
         } catch (error) {
             console.log(error);
             return res.status(500).send("Internal server error");

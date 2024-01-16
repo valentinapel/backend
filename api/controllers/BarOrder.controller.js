@@ -12,10 +12,10 @@ export const createBarOrder = async (req,res,next)=>{
 
             next();
         }
-        else return res.status(400).send("Bad request");
+        else return res.status(400).json(CreateError(400, "Bad request"));
     }catch(error){
         console.log(error);
-        return res.status(500).send("Internal server error");
+        return res.status(500).json(CreateError(500, "Internal server error"));
     }
 }
 
@@ -54,26 +54,26 @@ export const deleteOrder = async (req,res,next)=>{
     }
 }
 
-export const setToReady = async (req,res,next)=>{
+export const setToReady = async (req,res)=>{
     const order_id = req.body.id;
 
-    if(!id){
-        return next(CreateError(403, 'Order ID cannot be blank'));
+    if(!order_id){
+        return res.status(403).json(CreateError(403, "Order ID cannot be blank"));
     }
     else{
         try {
-            const order = await BarOrder.findById(id);
+            const order = await BarOrder.findById(order_id);
     
             if (!order) {
-                return next(CreateError(404, 'Order not found'));
+                return res.status(404).json(CreateError(404, "Order not found"));
             }
             
             order.ready = true;
             await order.save();
-            
-            return next(CreateSuccess(200, 'Order set to ready'));
+
+            return res.status(500).json(CreateSuccess(500, "Order set to ready"));
         } catch (error) {
-            return next(CreateError(500, 'Internal Server Error'));
+            return res.status(500).json(CreateError(500, "Internal server error"));
         }
     }
 }

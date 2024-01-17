@@ -34,22 +34,24 @@ export const getAllOrders = async (req, res) => {
 export const deleteOrder = async (req,res,next)=>{
     const order_id = req.body.id;
 
-    if(!id){
-        return next(CreateError(403, 'Order ID cannot be blank'));
+    if(!order_id){
+        return res.status(403).json(CreateError(403, "Order ID cannot be blank"));
     }
     else{
         try {
-            const deletedOrder = await BarOrder.findByIdAndDelete(id);
-    
+            const deletedOrder = await BarOrder.findByIdAndDelete(order_id);
             if (!deletedOrder) {
-                return next(CreateError(404, 'Order not found'));
+                return res.status(404).json(CreateError(404, "Order not found"));
             }
+            
+            console.log(deletedOrder.table);
+            req.body = {
+                table: deletedOrder.table
+            };
+            next();
 
-            setTableStatus(deletedOrder.table);
-
-            return next(CreateSuccess(200, 'Order deleted successfully'));
         } catch (error) {
-            return next(CreateError(500, 'Internal Server Error'));
+            return res.status(500).json(CreateError(500, "Internal server error"));
         }
     }
 }
@@ -80,6 +82,7 @@ export const setToReady = async (req,res)=>{
 
 export const setTableStatus = async (req,res)=>{
     const id = req.body.table;
+    console.log(id);
     if(!id){
         return res.status(403).send("Order ID cannot be blank");
     }
@@ -91,10 +94,10 @@ export const setTableStatus = async (req,res)=>{
                 return res.status(404).send("Table not found");
             }
             
-            const kitchenOrders = await KitchenOrder.find({ 'table': id });
-            const barOrders = await BarOrder.find({ 'table': id });
+            const kitchenOrders = await KitchenOrder.findOne({ 'table': id });
+            const barOrders = await BarOrder.findOne({ 'table': id });
 
-            if (!kitchenOrders && !barOrders) {
+            if ((!kitchenOrders) && (!barOrders)) {
                 table.occupied = false;
             }
             else{

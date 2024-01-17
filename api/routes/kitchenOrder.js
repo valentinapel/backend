@@ -5,7 +5,7 @@ const router= express.Router();
 
 router.post('/create', createKitchenOrder, setTableStatus);
 router.get('/all', getAllOrders);
-router.post('/delete', deleteOrder);
+router.post('/delete', deleteOrder, setTableStatus);
 router.post('/setReady', setToReady);
 
 export default router;

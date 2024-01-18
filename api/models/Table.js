@@ -15,6 +15,9 @@ const TableSchema =new Schema(
         occupied:{
             type:Boolean,
             required:true,
+        },
+        occupied_seats:{
+            type: Number
         }
 
 

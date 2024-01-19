@@ -22,6 +22,10 @@ const BarOrderSchema =new Schema(
             required: true,
         },
 
+        delivered:{
+            type:Boolean
+        },
+
         drinks: [DrinkItemSchema],
 
         date: { type: Date, default: Date.now }

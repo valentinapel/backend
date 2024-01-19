@@ -21,6 +21,10 @@ const KitchenOrderSchema =new Schema(
             type: Boolean,
             required: true,
         },
+        
+        delivered:{
+            type:Boolean
+        },
 
         foods: [FoodItemSchema],
 

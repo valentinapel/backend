@@ -1,16 +1,21 @@
 import KitchenOrder from '../models/KitchenOrder.js';
-import Table from "../models/Table.js";
 import {CreateSuccess} from "../utils/success.js";
 import {CreateError} from "../utils/error.js";
-import BarOrder from '../models/BarOrder.js';
 
 export const createKitchenOrder = async (req,res,next)=>{
     try{
         if(req.body.table){
+
+            const table_id = req.body.table;
+            const kitchenOrders = await KitchenOrder.findOne({ 'table': table_id });
+            if(kitchenOrders){
+                return res.status(400).json(CreateError(400, "Bad request"));
+            }
+
             const newOrder= new KitchenOrder(req.body);
             await newOrder.save();
 
-            next();
+            return res.status(200).json(CreateSuccess(200, "Order created", newOrder));
         }
         else return res.status(400).json(CreateError(400, "Bad request"));
     }catch(error){
@@ -47,7 +52,7 @@ export const deleteOrder = async (req,res,next)=>{
             req.body = {
                 table: deletedOrder.table
             };
-            next();
+            return res.status(200).json(CreateSuccess(200, "Order deleted", deletedOrder));
 
         } catch (error) {
             console.log(error);
@@ -80,36 +85,26 @@ export const setToReady = async (req,res)=>{
     }
 }
 
-export const setTableStatus = async (req,res)=>{
-    const id = req.body.table;
-    console.log(id);
-    if(!id){
-        return res.status(403).send("Order ID cannot be blank");
+export const deliver = async (req,res)=>{
+    const order_id = req.body.id;
+
+    if(!order_id){
+        return res.status(403).json(CreateError(403, "Order ID cannot be blank"));
     }
     else{
         try {
-            
-            const table = await Table.findById(id);
-            if (!table) {
-                return res.status(404).send("Table not found");
+            const order = await KitchenOrder.findById(order_id);
+    
+            if (!order) {
+                return res.status(404).json(CreateError(404, "Order not found"));
             }
             
-            const kitchenOrders = await KitchenOrder.findOne({ 'table': id });
-            const barOrders = await BarOrder.findOne({ 'table': id });
+            order.delivered = true;
+            await order.save();
 
-            if ((!kitchenOrders) && (!barOrders)) {
-                table.occupied = false;
-            }
-            else{
-                table.occupied = true;
-            }
-            
-            await table.save();
-
-            return res.status(200).json(CreateSuccess(200, "Table set correctly"));
+            return res.status(200).json(CreateSuccess(200, "Order set to delivered"));
         } catch (error) {
-            console.log(error);
-            return res.status(500).send("Internal server error");
+            return res.status(500).json(CreateError(500, "Internal server error"));
         }
     }
 }

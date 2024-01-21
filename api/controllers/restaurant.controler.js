@@ -99,7 +99,7 @@ export const clearOrders = async(req,res,next)=>{
             
             const updatedTable = await Table.findByIdAndUpdate(
                 table._id,
-                { occupied: false },
+                { occupied: false, occupied_seats: 0 },
                 { new: true }
               );
 
@@ -129,5 +129,31 @@ export const updateTable = async (req,res,next)=>{
 
     }catch(error){
         return res.status(500).send("internal server error");
+    }
+}
+
+export const setOccupied  = async(req,res,next)=>{
+    const table_id = req.body.id;
+    const n_clients = req.body.n_clients;
+    
+    try{
+        if(table_id && n_clients){
+            const table = await Table.findOne({ '_id': table_id });
+            if (!table) {
+                return res.status(404).json(CreateError(404, "Table not found"));
+            }
+
+            const updatedTable = await Table.findByIdAndUpdate(
+                table._id,
+                { occupied: true, occupied_seats: n_clients },
+                { new: true }
+              );
+
+            return res.status(200).json(CreateSuccess(200, "Table set as occupied"));
+        }
+        else return res.status(400).json(CreateError(400, "Bad request"));
+    }catch(error){
+        console.log(error);
+        return res.status(500).json(CreateError(500, "Internal server error"));
     }
 }

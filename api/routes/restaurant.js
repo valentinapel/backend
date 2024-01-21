@@ -5,7 +5,10 @@ import {
     createTable,
     getAllDrinks,
     getAllFoods,
-    getAllTables, updateTable, clearOrders
+    getAllTables,
+    updateTable,
+    clearOrders,
+    setOccupied
 } from "../controllers/restaurant.controler.js";
 
 const router= express.Router();
@@ -24,5 +27,6 @@ router.get('/getAllTables', getAllTables);
 router.put('/update/:id', updateTable);
 
 router.post('/clearOrders', clearOrders);
+router.post('/setOccupied', setOccupied)
 
 export default router;

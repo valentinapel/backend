@@ -4,7 +4,7 @@ import {CreateError} from "../utils/error.js";
 
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find().populate("roles", "role");
+        const users = await User.find().populate("roles", "role").select("-password");
         if (users.length === 0) {
             return res.status(404).json(CreateError(404, "No users found"));
         }
@@ -53,24 +53,24 @@ export const getUserRole = async (req, res) => {
     }
 };
 
-export const deleteUser = async (req,res,next)=>{
+export const deleteUser = async (req,res)=>{
     const user_id = req.body.id;
     // console.log('Received Id:', id);
 
-    if(!id){
-        return next(CreateError(403, 'User ID cannot be blank'));
+    if(!user_id){
+        return res.status(403).json(CreateError(403, "User ID cannot be blank"));
     }
     else{
         try {
-            const deletedUser = await User.findByIdAndDelete(id);
+            const deletedUser = await User.findByIdAndDelete(user_id);
     
             if (!deletedUser) {
-                return next(CreateError(404, 'User not found'));
+                return res.status(404).json(CreateError(404, "User not found"));
             }
     
-            return next(CreateSuccess(200, 'User deleted successfully'));
+            return res.status(200).json(CreateSuccess(200, "User deleted successfully"));
         } catch (error) {
-            return next(CreateError(500, 'Internal Server Error'));
+            return res.status(500).json(CreateError(500, "Internal server error"));
         }
     }
 }

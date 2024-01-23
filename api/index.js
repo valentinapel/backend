@@ -12,15 +12,19 @@ import kitchenOrderRoute from "./routes/kitchenOrder.js";
 import cors from 'cors';
 import cookieParser from "cookie-parser";
 
+// Load environment variables from .env file
 dotenv.config();
 const app = express();
 
+// Middleware for handling JSON and cookies
 app.use(express.json());
 app.use(cookieParser());
+// Enable CORS for specified origin and allow credentials
 app.use(cors(
     {origin: "http://localhost:4200" , credentials: true}
 ));
 
+// Define routes for different components
 app.use('/api/role', roleRoute)
 app.use("/api/auth", authRoute )
 app.use("/api/user", userRoute )
@@ -54,7 +58,7 @@ app.use((obj,req,res,next)=>{
     })
 });
 
-//DB connection
+// Database connection function
 const connectMongoDB = async()=>{
     try{
         await mongoose.connect(process.env.MONGO_URL);
@@ -64,6 +68,8 @@ const connectMongoDB = async()=>{
         throw error;
     }
 }
+
+// Start the server on port 8000
 app.listen(8000, ()=> {
     connectMongoDB();
     console.log("Connected to backend!");

@@ -43,18 +43,21 @@ export const verifyTokenDeprecated = (req, res, next) => {
 };
 
 
-
+// Middleware to verify the authenticity of a JWT token
 export const verifyToken=(req,res,next)=>{
+    // Extract the token from the request body
     const token = req.body.token;
     // console.log('Received Token:', token);
-
+    // Check if the token is not provided
     if(!token){
         return next(CreateError(401,"You are not authenticated"));
     }
     else{
+        // Verify the token using the secret key
         jwt.verify(token, process.env.JWT_SECRET,(err,user)=>{
             if(err){
                 console.error('Token verification error:', err);
+                // Handle different types of token verification errors
                 if (err.name === 'TokenExpiredError') {
                     return next(CreateError(401, 'Token has expired'));
                 } else if (err.name === 'JsonWebTokenError') {
@@ -80,23 +83,26 @@ export const verifyUserD = (req, res, next) => {
     });
 };
 
+// Middleware to verify if the user is authorized for a specific resource
 export const verifyUser =(req,res,next)=>{
+    // Use the verifyToken function to check the validity of the token
     verifyToken(req,res,()=>{
         console.log('User in verifyUser:', req.user);
-
+        // Check if the user ID matches the requested resource's ID or if the user is an admin
         if(req.user._id === req.params._id|| req.user.isAdmin){
-            next();
+            next();// Continue to the next middleware or route handler
         }else{
             return next(CreateError(403, "you arenot authorized"))
         }
     })
 }
 
-
+// Middleware to verify if the user is an admin
 export const verifyAdmin =(req,res,next)=>{
+    // Use the verifyToken function to check the validity of the token
     verifyToken(req,res,()=>{
         if( req.user.isAdmin){
-            next();
+            next();// Continue to the next middleware or route handler
         }else{
             return next(CreateError(403, "you are not authorized"))
         }

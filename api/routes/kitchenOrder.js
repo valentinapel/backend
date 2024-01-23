@@ -3,6 +3,7 @@ import {createKitchenOrder, getAllOrders, deleteOrder, setToReady, deliver} from
 
 const router= express.Router();
 
+//routing for crud operation of kitchen order
 router.post('/create', createKitchenOrder);
 router.get('/all', getAllOrders);
 router.post('/delete', deleteOrder);

@@ -3,6 +3,7 @@ import {createBarOrder, getAllOrders, deleteOrder, setToReady, deliver} from "..
 
 const router= express.Router();
 
+//routing for crud operation of bar order
 router.post('/create', createBarOrder);
 router.get('/all', getAllOrders);
 router.post('/delete', deleteOrder);

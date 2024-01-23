@@ -7,9 +7,10 @@ import {CreateSuccess} from "../utils/success.js";
 import {CreateError} from "../utils/error.js";
 
 //le funzioni di creazione servono a me per popolare DB
-
+// Function to create a new drink
 export const createDrink = async (req,res,next)=>{
     try{
+        // Check if the required properties are provided in the request body
         if(req.body.name && req.body.name!=='' && req.body.price){
             const newDrink= new Drink(req.body);
             await newDrink.save();
@@ -20,9 +21,10 @@ export const createDrink = async (req,res,next)=>{
         return res.status(500).send("internal server error");
     }
 }
-
+// Function to create a new food
 export const createFood = async (req,res,next)=>{
     try{
+        // Check if the required properties are provided in the request body
         if(req.body.name && req.body.name!=='' && req.body.price){
             const newFood= new Food(req.body);
             await newFood.save();
@@ -33,9 +35,10 @@ export const createFood = async (req,res,next)=>{
         return res.status(500).send("internal server error");
     }
 }
-
+// Function to create a new table
 export const createTable = async (req,res,next)=>{
     try{
+        // Check if the required properties are provided in the request body
         if( req.body.name && req.body.name!=='' ){
             const newTable= new Table(req.body);
             await newTable.save();
@@ -46,7 +49,7 @@ export const createTable = async (req,res,next)=>{
         return res.status(500).send("internal server error");
     }
 }
-
+// Function to get all drinks
 export const getAllDrinks = async (req,res,next)=>{
     try{
         const drinks = await Drink.find({});
@@ -57,6 +60,7 @@ export const getAllDrinks = async (req,res,next)=>{
     }
 }
 
+// Function to get all foods
 export const getAllFoods = async (req,res,next)=>{
     try{
         const foods = await Food.find({});
@@ -67,6 +71,7 @@ export const getAllFoods = async (req,res,next)=>{
     }
 }
 
+// Function to get all tables
 export const getAllTables = async (req,res,next)=>{
     try{
         const tables = await Table.find({});
@@ -77,6 +82,7 @@ export const getAllTables = async (req,res,next)=>{
     }
 }
 
+// Function to clear orders for a given table
 export const clearOrders = async(req,res,next)=>{
     const table_id = req.body.id;
     
@@ -112,6 +118,7 @@ export const clearOrders = async(req,res,next)=>{
     }
 }
 
+// Function to update table information
 export const updateTable = async (req,res,next)=>{
     try{
         const table = await Table.findById({_id: req.params.id});
@@ -132,6 +139,7 @@ export const updateTable = async (req,res,next)=>{
     }
 }
 
+// Function to set a table as occupied with a given number of clients
 export const setOccupied  = async(req,res,next)=>{
     const table_id = req.body.id;
     const n_clients = req.body.n_clients;

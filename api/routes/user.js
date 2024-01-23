@@ -5,7 +5,7 @@ import {getAllUsers,  getUserData, getUserRole, deleteUser} from "../controllers
 const router=express.Router();
 
 
-
+//routing for crud operation on user
 router.get('/', verifyAdmin, getAllUsers);
 
 router.get('/all', getAllUsers);

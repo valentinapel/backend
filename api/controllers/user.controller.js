@@ -2,9 +2,12 @@ import {CreateSuccess} from "../utils/success.js";
 import User from "../models/User.js";
 import {CreateError} from "../utils/error.js";
 
+// Function to get all users
 export const getAllUsers = async (req, res) => {
     try {
+        // Retrieve all users from the database, populate roles, and exclude the password field
         const users = await User.find().populate("roles", "role").select("-password");
+        // Check if any users are found
         if (users.length === 0) {
             return res.status(404).json(CreateError(404, "No users found"));
         }
@@ -14,6 +17,7 @@ export const getAllUsers = async (req, res) => {
     }
 };
 
+// Function to get user data by ID
 export const getUserData = async (req, res) => {
     try {
         console.log('ID Utente:', req.params.id);
@@ -25,34 +29,38 @@ export const getUserData = async (req, res) => {
             console.log('Utente non trovato');
             return res.status(404).json(CreateError(404, "User not found"));
         }
+        // Return the user data as a success response
         return res.status(200).json( user);
     } catch (error) {
         return res.status(500).json(CreateError(500, "Internal server error"));
     }
 };
 
+// Function to get user role by user ID
 export const getUserRole = async (req, res) => {
     try {
-        // Recupera l'ID dell'utente dal token o da dove lo stai memorizzando
+        // Retrieve the user ID from the token or wherever it is stored
         const userId = req.user.id;
 
-        // Trova l'utente nel database
+        // Find the user in the database, populate roles
         const user = await User.findById(userId).populate('roles');
+        // Check if the user is not found
         if (!user) {
             return res.status(404).json(CreateError(404, "User not found"));
         }
 
-        // Converte gli ID dei ruoli in array di oggetti con solo l'ID e il nome del ruolo
+        // Convert role IDs to an array of objects with only ID and role name
         const roleDetails = user.roles.map(role => ({ id: role._id, name: role.role }));
-        const roles = roleDetails.length === 1 ? roleDetails[0] : roleDetails;//tolgo l'array
+        const roles = roleDetails.length === 1 ? roleDetails[0] : roleDetails;
 
-
-        return res.status(200).json(  roles );//restituisce solo i due dati. id e name di ruolo
+        // Return the roles data as a success response
+        return res.status(200).json(  roles );
     } catch (error) {
         return res.status(500).json(CreateError(500, "Internal server error"));
     }
 };
 
+// Function to delete a user by user ID
 export const deleteUser = async (req,res)=>{
     const user_id = req.body.id;
     // console.log('Received Id:', id);
@@ -62,6 +70,7 @@ export const deleteUser = async (req,res)=>{
     }
     else{
         try {
+            // Find and delete the user by ID
             const deletedUser = await User.findByIdAndDelete(user_id);
     
             if (!deletedUser) {

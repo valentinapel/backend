@@ -10,7 +10,6 @@ export const verifyTokenDeprecated = (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
         if (err) {
-            // Aggiungi una gestione specifica per i diversi tipi di errori JWT
             if (err.name === 'JsonWebTokenError') {
                 return next(CreateError(401, "Invalid token"));
             } else if (err.name === 'TokenExpiredError') {

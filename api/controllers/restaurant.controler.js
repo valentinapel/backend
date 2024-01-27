@@ -151,6 +151,10 @@ export const setOccupied  = async(req,res,next)=>{
                 return res.status(404).json(CreateError(404, "Table not found"));
             }
 
+            if(n_clients > table.n_seats || n_clients < 0){
+                return res.status(400).json(CreateError(400, "Bad request"));
+            }
+
             const updatedTable = await Table.findByIdAndUpdate(
                 table._id,
                 { occupied: true, occupied_seats: n_clients },

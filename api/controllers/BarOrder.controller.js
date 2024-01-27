@@ -7,6 +7,7 @@ export const createBarOrder = async (req,res,next)=>{
     try{
         // Check if the request body contains a 'table' property
         if(req.body.table){
+            
             const table_id = req.body.table;
             // Check if there is already an order for the specified table
             const barOrders = await BarOrder.findOne({ 'table': table_id });

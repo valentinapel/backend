@@ -7,15 +7,10 @@ const router=express.Router();
 
 //routing for crud operation on user
 router.get('/', verifyAdmin, getAllUsers);
-
 router.get('/all', getAllUsers);
-
-router.get('/getUserData/:id', verifyUser,  getUserData);
-
-router.get('/getUserRole',  getUserRole);
-
-router.post('/getUserDataFromToken', verifyToken);
-
+router.get('/data/:id', verifyUser,  getUserData);
+router.get('/role/:id',  getUserRole);
+router.post('/data/token', verifyToken);
 router.post('/delete', deleteUser);
 
 export default router;

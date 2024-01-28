@@ -34,7 +34,7 @@ export const getAllOrders = async (req, res) => {
         const orders = await BarOrder.find().populate("table");
         // Check if any orders were found
         if (orders.length === 0) {
-            return res.status(404).json(CreateError(404, "No orders found"));
+            return res.status(200).json(CreateSuccess(200, "No orders found", []));
         }
         return res.status(200).json(CreateSuccess(200, "All orders", orders));
     } catch (error) {

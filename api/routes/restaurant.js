@@ -14,19 +14,20 @@ import {
 const router= express.Router();
 
 //routing for the creation function
-router.post('/createDrink', createDrink);
-router.post('/createFood', createFood);
-router.post('/createTable', createTable);
+router.post('/drink/create', createDrink);
+router.post('/food/create', createFood);
+router.post('/table/create', createTable);
 
 //routing for the get function
-router.get('/getAllDrinks', getAllDrinks);
-router.get('/getAllFoods', getAllFoods);
-router.get('/getAllTables', getAllTables);
+router.get('/drink/all', getAllDrinks);
+router.get('/food/all', getAllFoods);
+router.get('/table/all', getAllTables);
 
-//route for the updating of the table occupied=false->true
 router.put('/update/:id', updateTable);
 
+// Delete all orders for a table and set it to not occupied
 router.post('/clearOrders', clearOrders);
-router.post('/setOccupied', setOccupied)
+// Set a table to occupied
+router.post('/table/occupied', setOccupied)
 
 export default router;

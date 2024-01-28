@@ -39,29 +39,6 @@ export const register = async (req,res,next)=> {
     }
 }
 
-//logic for the registration of an admin
-export const registerAdmin = async (req,res,next)=> {
-    try {
-        // Fetch all available roles for an admin
-        const role = await Role.find({});
-
-        const salt = await bcrypt.genSalt(10);
-        const hashPassword = await bcrypt.hash(req.body.password, salt);
-        const newUser = new User({
-            username: req.body.username,
-            email: req.body.email,
-            password: hashPassword,
-            isAdmin:true,
-            roles: role
-        });
-        await newUser.save();
-        return next(CreateSuccess(200, "user registered successfully"));
-    }
-    catch(error){
-        return next(CreateError(400, "username or password already registered"));
-    }
-}
-
 //logic for the login of a user
 export const login=  async (req,res,next)=>{
     try{

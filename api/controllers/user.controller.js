@@ -40,7 +40,7 @@ export const getUserData = async (req, res) => {
 export const getUserRole = async (req, res) => {
     try {
         // Retrieve the user ID from the token or wherever it is stored
-        const userId = req.user.id;
+        const userId = req.params.id;
 
         // Find the user in the database, populate roles
         const user = await User.findById(userId).populate('roles');

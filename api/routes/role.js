@@ -11,7 +11,7 @@ router.post('/create', createRole);
 //routing update role on DB
 router.put('/update/:id', updateRole);
 //routing get all the role from DB
-router.get('/getAll', getAllRoles);
+router.get('/all', getAllRoles);
 //routing delete role from db
-router.delete("/deleteRole/:id", deleteRole);
+router.delete("/delete/:id", deleteRole);
 export default router;

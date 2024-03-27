@@ -141,7 +141,7 @@ export const updateTable = async (req,res,next)=>{
 
 // Function to set a table as occupied with a given number of clients
 export const setOccupied  = async(req,res,next)=>{
-    const table_id = req.body.id;
+    const table_id = req.params.id;
     const n_clients = req.body.n_clients;
     
     try{

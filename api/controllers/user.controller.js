@@ -21,7 +21,7 @@ export const getAllUsers = async (req, res) => {
 export const getUserData = async (req, res) => {
     try {
         console.log('ID Utente:', req.params.id);
-        const user = await User.findById(req.params.id).populate("roles", "role");
+        const user = await User.findById(req.params.id).populate("roles", "role").select("-password");
 
         console.log('Utente trovato:', user);
 
@@ -62,7 +62,7 @@ export const getUserRole = async (req, res) => {
 
 // Function to delete a user by user ID
 export const deleteUser = async (req,res)=>{
-    const user_id = req.body.id;
+    const user_id = req.params.id;
     // console.log('Received Id:', id);
 
     if(!user_id){
@@ -82,4 +82,14 @@ export const deleteUser = async (req,res)=>{
             return res.status(500).json(CreateError(500, "Internal server error"));
         }
     }
+}
+
+export const editUser = async(req,res)=>{
+    return res.status(501).json(CreateError(501, "Function not implemented"));
+}
+
+// Function to create a new user
+// Technically useless since you could just use /register
+export const createUser  = async (req,res)=>{
+    return res.status(501).json(CreateError(501, "Function not implemented"));
 }

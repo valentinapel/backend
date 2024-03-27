@@ -45,11 +45,11 @@ export const verifyTokenDeprecated = (req, res, next) => {
 // Middleware to verify the authenticity of a JWT token
 export const verifyToken=(req,res,next)=>{
     // Extract the token from the request body
-    const token = req.body.token;
+    const token = req.header('Authorization');
     // console.log('Received Token:', token);
     // Check if the token is not provided
     if(!token){
-        return next(CreateError(401,"You are not authenticated"));
+        return res.status(401).json(CreateError(401, "Unauthorized"));
     }
     else{
         // Verify the token using the secret key
@@ -65,7 +65,8 @@ export const verifyToken=(req,res,next)=>{
                     return next(CreateError(500, 'Internal Server Error'));
                 }
             }
-            return res.status(200).json({user});
+            req.user = user;
+            next();
         })
     }
 }
@@ -91,7 +92,7 @@ export const verifyUser =(req,res,next)=>{
         if(req.user._id === req.params._id|| req.user.isAdmin){
             next();// Continue to the next middleware or route handler
         }else{
-            return next(CreateError(403, "you arenot authorized"))
+            return res.status(401).json(CreateError(401, "Unauthorized"));
         }
     })
 }
@@ -100,10 +101,10 @@ export const verifyUser =(req,res,next)=>{
 export const verifyAdmin =(req,res,next)=>{
     // Use the verifyToken function to check the validity of the token
     verifyToken(req,res,()=>{
-        if( req.user.isAdmin){
+        if(req.user.isAdmin){
             next();// Continue to the next middleware or route handler
         }else{
-            return next(CreateError(403, "you are not authorized"))
+            return res.status(401).json(CreateError(401, "Unauthorized"));
         }
     })
 }

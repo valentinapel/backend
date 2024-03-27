@@ -1,16 +1,22 @@
 import express from'express';
 import {verifyAdmin,  verifyUser, verifyToken} from "../utils/verifyToken.js";
-import {getAllUsers,  getUserData, getUserRole, deleteUser} from "../controllers/user.controller.js";
+import {getAllUsers,  getUserData, getUserRole, deleteUser, createUser, editUser} from "../controllers/user.controller.js";
 
 const router=express.Router();
 
+// Routing for operations on user profiles
 
-//routing for crud operation on user
-router.get('/', verifyAdmin, getAllUsers);
-router.get('/all', getAllUsers);
-router.get('/data/:id', verifyUser,  getUserData);
-router.get('/role/:id',  getUserRole);
-router.post('/data/token', verifyToken);
-router.post('/delete', deleteUser);
+// Returns all users
+router.get('/', verifyToken, getAllUsers);
+// Return a single user
+router.get('/:id', verifyToken, getUserData);
+// Return only the role for a single user
+router.get('/:id/role', verifyToken, getUserRole);
+// Add a new user
+router.post('/', verifyAdmin, createUser);
+// Edit an existing user
+router.put('/:id', verifyAdmin, editUser)
+// Delete an user
+router.delete('/:id', verifyAdmin, deleteUser)
 
 export default router;

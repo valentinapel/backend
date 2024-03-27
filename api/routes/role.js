@@ -6,12 +6,12 @@ import {createRole, deleteRole, getAllRoles, updateRole} from "../controllers/ro
 const router= express.Router();
 
 //routing create role on DB
-router.post('/create', createRole);
+router.post('/', createRole);
 
 //routing update role on DB
-router.put('/update/:id', updateRole);
+router.put('/:id', verifyAdmin, updateRole);
 //routing get all the role from DB
-router.get('/all', getAllRoles);
+router.get('/', verifyToken, getAllRoles);
 //routing delete role from db
-router.delete("/delete/:id", deleteRole);
+router.delete("/:id", verifyAdmin, deleteRole);
 export default router;

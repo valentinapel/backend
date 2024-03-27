@@ -6,9 +6,9 @@ import {CreateError} from "../utils/error.js";
 export const createBarOrder = async (req,res,next)=>{
     try{
         // Check if the request body contains a 'table' property
-        if(req.body.table){
+        if(req.params.tableid){
             
-            const table_id = req.body.table;
+            const table_id = req.params.tableid;
             // Check if there is already an order for the specified table
             const barOrders = await BarOrder.findOne({ 'table': table_id });
             if(barOrders){
@@ -43,7 +43,7 @@ export const getAllOrders = async (req, res) => {
 }
 // Delete a bar order
 export const deleteOrder = async (req,res,next)=>{
-    const order_id = req.body.id;
+    const order_id = req.params.id;
     // Check if the order ID is provided
     if(!order_id){
         return res.status(403).json(CreateError(403, "Order ID cannot be blank"));
@@ -72,7 +72,7 @@ export const deleteOrder = async (req,res,next)=>{
 
 // Set a bar order to ready status
 export const setToReady = async (req,res)=>{
-    const order_id = req.body.id;
+    const order_id = req.params.id;
 
     if(!order_id){
         return res.status(403).json(CreateError(403, "Order ID cannot be blank"));
@@ -97,7 +97,7 @@ export const setToReady = async (req,res)=>{
 
 // Set a bar order to delivered status
 export const deliver = async (req,res)=>{
-    const order_id = req.body.id;
+    const order_id = req.params.id;
 
     if(!order_id){
         return res.status(403).json(CreateError(403, "Order ID cannot be blank"));

@@ -10,7 +10,7 @@ import {createRole, deleteRole, getAllRoles, updateRole} from "../controllers/ro
 const router= express.Router();
 
 //routing create role on DB
-router.post('/', createRole);
+router.post('/', verifyAdmin, createRole);
 
 //routing update role on DB
 router.put('/:id', verifyAdmin, updateRole);

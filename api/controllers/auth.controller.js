@@ -44,7 +44,7 @@ export const login=  async (req,res,next)=>{
     try{
         // Find the user in the database by email and populate their roles
         const user = await User.findOne({email:req.body.email})
-            .populate("roles", "role");
+            .populate("roles", "role").select("-password");
         const{roles} =user;
         if(!user) {
             return res.status(404).send("user not found");

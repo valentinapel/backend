@@ -44,7 +44,7 @@ export const login=  async (req,res,next)=>{
     try{
         // Find the user in the database by email and populate their roles
         const user = await User.findOne({email:req.body.email})
-            .populate("roles", "role").select("-password");
+            .populate("roles", "role");
         const{roles} =user;
         if(!user) {
             return res.status(404).send("user not found");
@@ -59,12 +59,12 @@ export const login=  async (req,res,next)=>{
         const token =jwt.sign({
             id:user._id, username:user.username, isAdmin:user.isAdmin, roles:roles},process.env.JWT_SECRET
         )
-        // Return success message along with user data and token
+        // Return success message along with user ID and token
         res.status(200)
             .json({
                 status:200,
                 message:"Login success",
-                data:user,
+                user_id:user._id,
                 token:token,
             })
 

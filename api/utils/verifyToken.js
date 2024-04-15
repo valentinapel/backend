@@ -46,7 +46,7 @@ export const verifyTokenDeprecated = (req, res, next) => {
 export const verifyToken=(req,res,next)=>{
     // Extract the token from the request body
     const token = req.header('Authorization');
-    // console.log('Received Token:', token);
+    console.log('Received Token:', token);
     // Check if the token is not provided
     if(!token){
         return res.status(401).json(CreateError(401, "Unauthorized"));

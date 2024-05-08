@@ -7,7 +7,7 @@ const router=express.Router();
 // Routing for operations on user profiles
 
 // Returns all users
-router.get('/', verifyToken, getAllUsers);
+router.get('/', verifyAdmin, getAllUsers);
 // Return a single user
 router.get('/:id', verifyToken, getUserData);
 // Return only the role for a single user

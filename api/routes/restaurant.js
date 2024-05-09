@@ -20,15 +20,15 @@ router.post('/food/', verifyAdmin, createFood);
 router.post('/table/', verifyAdmin, createTable);
 
 //routing for the get function
-router.get('/drink/', verifyToken, getAllDrinks);
-router.get('/food/', verifyToken, getAllFoods);
-router.get('/table/', verifyToken, getAllTables);
+router.get('/drink/', verifyToken, getAllDrinks); //RUOLO CAMERIERE, CASSIERE
+router.get('/food/', verifyToken, getAllFoods); //RUOLO CAMERIERE, CASSIERE
+router.get('/table/', verifyToken, getAllTables);//RUOLO BARISTA,CUOCO, CAMERIERE,CASSIERE
 
-router.put('/table/:id', verifyToken, updateTable);
+router.put('/table/:id', verifyToken, updateTable); //NON VIENE USATO
 
 // Delete all orders for a table and set it to not occupied
-router.put('/table/:id/clearOrders', verifyToken, clearOrders);
+router.put('/table/:id/clearOrders', verifyAdmin, clearOrders);
 // Set a table to occupied
-router.put('/table/:id/setOccupied', verifyToken, setOccupied);
+router.put('/table/:id/setOccupied', verifyToken, setOccupied); //RUOLO CAMERIERE
 
 export default router;

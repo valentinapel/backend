@@ -5,10 +5,10 @@ import {verifyAdmin,  verifyUser, verifyToken} from "../utils/verifyToken.js";
 const router= express.Router();
 
 //routing for crud operation of bar order
-router.post('/:tableid', verifyToken, createBarOrder);
-router.get('/', verifyToken, getAllOrders);
-router.delete('/:id', verifyToken, deleteOrder);
-router.put('/:id/setReady', verifyToken, setToReady);
-router.put('/:id/deliver', verifyToken, deliver);
+router.post('/:tableid', verifyToken, createBarOrder); //RUOLO CAMERIERE
+router.get('/', verifyToken, getAllOrders); //RUOLO BARISTA,CAMERIERE,CASSIERE
+router.delete('/:id', verifyToken, deleteOrder);//RUOLO CAMERIERE, BARISTA,CASSIERE
+router.put('/:id/setReady', verifyToken, setToReady); //RUOLO BARISTA
+router.put('/:id/deliver', verifyToken, deliver); //RUOLO BARISTA, CAMERIERE
 
 export default router;

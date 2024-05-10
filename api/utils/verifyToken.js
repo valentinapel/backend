@@ -108,3 +108,16 @@ export const verifyAdmin =(req,res,next)=>{
         }
     })
 }
+
+// Middleware to verify bartender authorization to oder
+export const verifyBarOrder = (req, res, next) => {
+    // Use the verifyToken function to check the validity of the token
+    verifyToken(req, res, () => {
+        // Check if the user's roles include "bartender"
+        if (req.user.roles.includes("bartender")) {
+            next(); // Continue to the next middleware or route handler
+        } else {
+            return res.status(401).json(CreateError(401, "Unauthorized"));
+        }
+    });
+};

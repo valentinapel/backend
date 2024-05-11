@@ -110,7 +110,7 @@ export const verifyAdmin =(req,res,next)=>{
 }
 
 // Middleware to verify bartender authorization to oder
-export const verifyBarOrder = (req, res, next) => {
+export const verifyRoleBartender = (req, res, next) => {
     // Use the verifyToken function to check the validity of the token
     verifyToken(req, res, () => {
         // Check if the user's roles include "bartender"

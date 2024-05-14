@@ -23,6 +23,7 @@ export const register = async (req,res,next)=> {
             isAdmin: req.body.isAdmin,
             isBartender: req.body.isBartender,
             isWaitress: req.body.isWaitress,
+            isCook: req.body.isCook,
             password: hashPassword,
             roles: []
         });
@@ -59,7 +60,7 @@ export const login=  async (req,res,next)=>{
         }
         // Generate a JWT token for the user
         const token =jwt.sign({
-            id:user._id, username:user.username, isAdmin:user.isAdmin, roles:roles},process.env.JWT_SECRET
+            id:user._id, username:user.username, isAdmin:user.isAdmin,isBartender:user.isBartender, isWaitress:user.isWaitress, isCook:user.isCook, roles:roles},process.env.JWT_SECRET
         )
         // Return success message along with user ID and token
         res.status(200)

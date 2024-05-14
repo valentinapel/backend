@@ -27,6 +27,10 @@ const UserSchema =new Schema(
             type:Boolean,
             default:false
         },
+        isCook:{
+            type:Boolean,
+            default:false
+        },
 
         roles:  [{ type: mongoose.Types.ObjectId, ref: 'Role' }]
 

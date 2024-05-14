@@ -1,6 +1,6 @@
 import express from "express";
 import {createKitchenOrder, getAllOrders, deleteOrder, setToReady, deliver} from "../controllers/kitchenOrder.controller.js";
-import {verifyAdmin,  verifyUser, verifyToken} from "../utils/verifyToken.js";
+import {verifyAdmin, verifyUser, verifyToken} from "../utils/verifyToken.js";
 
 const router= express.Router();
 

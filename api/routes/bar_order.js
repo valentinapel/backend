@@ -9,6 +9,6 @@ router.post('/:tableid', verifyRoleWaitress, createBarOrder); //RUOLO CAMERIERE
 router.get('/', verifyToken, getAllOrders); //RUOLO BARISTA,CAMERIERE,CASSIERE
 router.delete('/:id', verifyToken, deleteOrder);//RUOLO CAMERIERE, BARISTA,CASSIERE
 router.put('/:id/setReady', verifyRoleBartender, setToReady); //RUOLO BARISTA
-router.put('/:id/deliver', verifyToken, deliver); //RUOLO BARISTA, CAMERIERE
+router.put('/:id/deliver', verifyRoleWaitress, deliver); //RUOLO BARISTA, CAMERIERE
 
 export default router;

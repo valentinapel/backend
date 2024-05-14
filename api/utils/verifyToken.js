@@ -31,7 +31,9 @@ export const verifyTokenDeprecated = (req, res, next) => {
                 username: userWithRoles.username,
                 email: userWithRoles.email,
                 roles: userWithRoles.roles,
-                isAdmin: userWithRoles.isAdmin
+                isAdmin: userWithRoles.isAdmin,
+                isBartender: userWithRoles.isBartender,
+                isWaitress: userWithRoles.isWaitress
             };
 
             next();
@@ -88,8 +90,8 @@ export const verifyUser =(req,res,next)=>{
     // Use the verifyToken function to check the validity of the token
     verifyToken(req,res,()=>{
         console.log('User in verifyUser:', req.user);
-        // Check if the user ID matches the requested resource's ID or if the user is an admin
-        if(req.user._id === req.params._id|| req.user.isAdmin){
+        // Check if the user ID matches the requested resource's ID or if the user is an admin, bartender or waitress
+        if(req.user._id === req.params._id || req.user.isAdmin || req.user.isBartender || req.user.isWaitress){
             next();// Continue to the next middleware or route handler
         }else{
             return res.status(401).json(CreateError(401, "Unauthorized"));
@@ -113,11 +115,23 @@ export const verifyAdmin =(req,res,next)=>{
 export const verifyRoleBartender = (req, res, next) => {
     // Use the verifyToken function to check the validity of the token
     verifyToken(req, res, () => {
-        // Check if the user's roles include "bartender"
-        if (req.user.roles.includes("bartender")) {
+        // Check if the user is a bartender
+        if (req.user.isBartender) {
             next(); // Continue to the next middleware or route handler
         } else {
-            return res.status(401).json(CreateError(401, "Unauthorized"));
+            return res.status(403).json(CreateError(403, "Unauthorized: Only bartenders can access this resource"));
         }
     });
 };
+
+export const verifyRoleWaitress = (req, res, next) => {
+    // Use the verifyToken function to check the validity of the token
+    verifyToken(req, res, () => {
+        // Check if the user is a bartender
+        if (req.user.isWaitress) {
+            next(); // Continue to the next middleware or route handler
+        } else {
+            return res.status(403).json(CreateError(403, "Unauthorized: Only waitresses can access this resource"));
+        }
+    });
+}

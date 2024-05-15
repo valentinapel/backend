@@ -23,6 +23,7 @@ export const register = async (req,res,next)=> {
             isAdmin: req.body.isAdmin,
             isBartender: req.body.isBartender,
             isWaitress: req.body.isWaitress,
+            isCashier: req.body.isCashier,
             isCook: req.body.isCook,
             password: hashPassword,
             roles: []

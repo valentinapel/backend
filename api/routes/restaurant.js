@@ -10,7 +10,7 @@ import {
     clearOrders,
     setOccupied
 } from "../controllers/restaurant.controler.js";
-import {verifyAdmin,  verifyUser, verifyToken} from "../utils/verifyToken.js";
+import {verifyAdmin, verifyUser, verifyToken, verifyRoleWaitress, verifyOrderAccess} from "../utils/verifyToken.js";
 
 const router= express.Router();
 
@@ -20,15 +20,15 @@ router.post('/food/', verifyAdmin, createFood);
 router.post('/table/', verifyAdmin, createTable);
 
 //routing for the get function
-router.get('/drink/', verifyToken, getAllDrinks); //RUOLO CAMERIERE, CASSIERE
-router.get('/food/', verifyToken, getAllFoods); //RUOLO CAMERIERE, CASSIERE
-router.get('/table/', verifyToken, getAllTables);//RUOLO BARISTA,CUOCO, CAMERIERE,CASSIERE
+router.get('/drink/', verifyOrderAccess, getAllDrinks); //RUOLO CAMERIERE, CASSIERE - done
+router.get('/food/', verifyOrderAccess, getAllFoods); //RUOLO CAMERIERE, CASSIERE - done
+router.get('/table/', verifyOrderAccess, getAllTables);//RUOLO BARISTA,CUOCO, CAMERIERE,CASSIERE - done
 
 router.put('/table/:id', verifyToken, updateTable); //NON VIENE USATO
 
 // Delete all orders for a table and set it to not occupied
 router.put('/table/:id/clearOrders', verifyAdmin, clearOrders);
 // Set a table to occupied
-router.put('/table/:id/setOccupied', verifyToken, setOccupied); //RUOLO CAMERIERE
+router.put('/table/:id/setOccupied', verifyRoleWaitress, setOccupied); //RUOLO CAMERIERE
 
 export default router;

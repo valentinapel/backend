@@ -108,7 +108,7 @@ export const verifyAdmin =(req,res,next)=>{
         if(req.user.isAdmin){
             next();// Continue to the next middleware or route handler
         }else{
-            return res.status(401).json(CreateError(401, "Unauthorized"));
+            return res.status(401).json(CreateError(401, "Unauthorized: only Cashiers can access this resource"));
         }
     })
 }
@@ -153,17 +153,46 @@ export const verifyRoleCook = (req, res, next) => {
 export const verifyOrderAccess = (req, res, next) => {
     // Use the verifyToken function to check the validity of the token
     verifyToken(req, res, () => {
+        // Check if the user is a waitress, cashier
+        if(req.user.isWaitress || req.user.isCashier) {
+            next();
+        }else {
+            return res.status(403).json(CreateError(403, "Unauthorized: Only waitresses amd cashiers can access this resource"));
+        }
+    });
+}
+
+export const verifyOrderAccessKitchen = (req, res, next) => {
+    // Use the verifyToken function to check the validity of the token
+    verifyToken(req, res, () => {
+        if(req.user.isCook || req.user.isWaitress || req.user.isCashier) {
+            next();
+        }else {
+            return res.status(403).json(CreateError(403, "Unauthorized: Only specific cooks, waitresses and cashiers can access this resource"));
+        }
+    });
+}
+
+export const verifyOrderAccessBar = (req, res, next) => {
+    // Use the verifyToken function to check the validity of the token
+    verifyToken(req, res, () => {
         // Check if the user is a waitress, cashier, or barman
         if (req.user.isWaitress || req.user.isCashier || req.user.isBartender) {
             next(); // Continue to the next middleware or route handler
-        } else if(req.user.isWaitress || req.user.isCashier) {
-            next();
-        } else if(req.user.isBartender || req.user.isCook || req.user.isWaitress || req.user.isCashier) {
-            next();
-        } else if(req.user.isCook || req.user.isWaitress || req.user.isCashier) {
-            next();
-        }else {
-            return res.status(403).json(CreateError(403, "Unauthorized: Only specific roles can access this resource"));
+        } else {
+            return res.status(403).json(CreateError(403, "Unauthorized: bartenders,waitresses and cashiers can access this resource"));
+        }
+    });
+}
+
+export const verifyOrderAccessDeliver = (req, res, next) => {
+    // Use the verifyToken function to check the validity of the token
+    verifyToken(req, res, () => {
+        // Check if the user is a waitress, cashier, or barman
+        if (req.user.isWaitress || req.user.isBartender) {
+            next(); // Continue to the next middleware or route handler
+        } else {
+            return res.status(403).json(CreateError(403, "Unauthorized: Only waitresses and bartenders can access this resource"));
         }
     });
 }

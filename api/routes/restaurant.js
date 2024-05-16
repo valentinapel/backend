@@ -22,7 +22,7 @@ router.post('/table/', verifyAdmin, createTable);
 //routing for the get function
 router.get('/drink/', verifyOrderAccess, getAllDrinks); //RUOLO CAMERIERE, CASSIERE - done
 router.get('/food/', verifyOrderAccess, getAllFoods); //RUOLO CAMERIERE, CASSIERE - done
-router.get('/table/', verifyOrderAccess, getAllTables);//RUOLO BARISTA,CUOCO, CAMERIERE,CASSIERE - done
+router.get('/table/', verifyToken, getAllTables);//RUOLO BARISTA,CUOCO, CAMERIERE,CASSIERE - done
 
 router.put('/table/:id', verifyToken, updateTable); //NON VIENE USATO
 

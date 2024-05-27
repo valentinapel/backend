@@ -2,50 +2,6 @@ import jwt from 'jsonwebtoken';
 import {CreateError} from "./error.js";
 import User from "../models/User.js";
 
-export const verifyTokenDeprecated = (req, res, next) => {
-    const token = req.cookies.access_token;
-    if (!token) {
-        return next(CreateError(401, "You are not authenticated"));
-    }
-
-    jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
-        if (err) {
-            if (err.name === 'JsonWebTokenError') {
-                return next(CreateError(401, "Invalid token"));
-            } else if (err.name === 'TokenExpiredError') {
-                return next(CreateError(401, "Token has expired"));
-            } else {
-                return next(CreateError(403, "Token is not valid"));
-            }
-        }
-
-        // Carica i ruoli dell'utente
-        try {
-            const userWithRoles = await User.findById(user.id).populate('roles');
-            if (!userWithRoles) {
-                return next(CreateError(404, "User not found"));
-            }
-
-            req.user = {
-                id: user.id,
-                username: userWithRoles.username,
-                email: userWithRoles.email,
-                roles: userWithRoles.roles,
-                isAdmin: userWithRoles.isAdmin,
-                isBartender: userWithRoles.isBartender,
-                isWaitress: userWithRoles.isWaitress,
-                isCashier: userWithRoles.isCashier,
-                isCook: userWithRoles.isCook
-            };
-
-            next();
-        } catch (error) {
-            return next(CreateError(500, "Internal server error"));
-        }
-    });
-};
-
-
 // Middleware to verify the authenticity of a JWT token
 export const verifyToken=(req,res,next)=>{
     // Extract the token from the request body
@@ -74,18 +30,6 @@ export const verifyToken=(req,res,next)=>{
         })
     }
 }
-
-export const verifyUserD = (req, res, next) => {
-    verifyToken(req, res, () => {
-
-        if (req.user && (req.user.id || req.user.isAdmin)) {
-            req.params.id = req.user.id;
-            next();
-        } else {
-            return next(CreateError(403, "You are not authorized"));
-        }
-    });
-};
 
 // Middleware to verify if the user is authorized for a specific resource
 export const verifyUser =(req,res,next)=>{
@@ -154,7 +98,7 @@ export const verifyOrderAccess = (req, res, next) => {
     // Use the verifyToken function to check the validity of the token
     verifyToken(req, res, () => {
         // Check if the user is a waitress, cashier
-        if(req.user.isWaitress || req.user.isCashier) {
+        if(req.user.isWaitress || req.user.isAdmin) {
             next();
         }else {
             return res.status(403).json(CreateError(403, "Unauthorized: Only waitresses amd cashiers can access this resource"));
@@ -165,7 +109,7 @@ export const verifyOrderAccess = (req, res, next) => {
 export const verifyOrderAccessKitchen = (req, res, next) => {
     // Use the verifyToken function to check the validity of the token
     verifyToken(req, res, () => {
-        if(req.user.isCook || req.user.isWaitress || req.user.isCashier) {
+        if(req.user.isCook || req.user.isWaitress || req.user.isAdmin) {
             next();
         }else {
             return res.status(403).json(CreateError(403, "Unauthorized: Only specific cooks, waitresses and cashiers can access this resource"));
@@ -177,7 +121,7 @@ export const verifyOrderAccessBar = (req, res, next) => {
     // Use the verifyToken function to check the validity of the token
     verifyToken(req, res, () => {
         // Check if the user is a waitress, cashier, or barman
-        if (req.user.isWaitress || req.user.isCashier || req.user.isBartender) {
+        if (req.user.isWaitress || req.user.isAdmin || req.user.isBartender) {
             next(); // Continue to the next middleware or route handler
         } else {
             return res.status(403).json(CreateError(403, "Unauthorized: bartenders,waitresses and cashiers can access this resource"));
